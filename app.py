@@ -1,5 +1,8 @@
 from flask import Flask
 from flask import render_template
+from flask import request
+from flask import redirect
+from flask import url_for
 from programm_modules import CRUD
 
 blog_post_file_path = "programm_database/blog_posts.json"
@@ -11,6 +14,24 @@ blog_data = CRUD.Crud(blog_post_file_path)
 def index():
     blog_posts = blog_data.get_posts()
     return render_template('index.html', posts=blog_posts)
+
+
+@app.route('/add', methods=['GET', 'POST'])
+def add():
+    if request.method == 'POST':
+        title = request.form.get('title')  # Holt den Titel aus dem Formular
+        author = request.form.get('author')  # Holt den Autor
+        content = request.form.get('content')  # Holt den Inhalt
+
+        if title and author and content:
+            blog_posts = blog_data.get_posts()
+            blog_posts.append({'id': blog_data.get_id() + 1, 'title': title, 'author': author, 'content': content})
+
+            blog_data.save_posts(blog_posts)
+
+            return redirect(url_for('index'))
+
+    return render_template('new_post.html')
 
 
 if __name__ == '__main__':
