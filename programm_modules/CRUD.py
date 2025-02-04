@@ -18,3 +18,16 @@ class Crud:
 
       return []
 
+
+  def save_posts(self, new_data):
+    """saves new data to json-file"""
+    with open(self.file_path, 'w') as json_obj:
+      json.dump(new_data, json_obj, indent=4)
+
+
+  def get_id(self):
+      """returns newest_blog_post_id"""
+      blog_posts = self.get_posts()
+      newest_id = blog_posts[-1]['id']
+
+      return newest_id
