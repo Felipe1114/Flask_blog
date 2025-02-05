@@ -34,5 +34,21 @@ def add():
     return render_template('new_post.html')
 
 
+@app.route('/delete/<post_id>', methods=['POST'])
+def delete_post(post_id):
+    blog_posts = blog_data.get_posts()
+
+    for index, dictionary in enumerate(blog_posts):
+
+        if dictionary['id'] == int(post_id):
+            del blog_posts[index]
+
+    blog_data.save_posts(blog_posts)
+
+
+    # reload index.html, cause the data has changed
+    return redirect(url_for('index'))
+
+
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000, debug=False)
