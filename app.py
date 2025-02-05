@@ -25,7 +25,7 @@ def add():
 
         if title and author and content:
             blog_posts = blog_data.get_posts()
-            blog_posts.append({'id': blog_data.get_id() + 1, 'title': title, 'author': author, 'content': content})
+            blog_posts.append({'id': blog_data.get_newest_id() + 1, 'title': title, 'author': author, 'content': content})
 
             blog_data.save_posts(blog_posts)
 
@@ -34,20 +34,44 @@ def add():
     return render_template('new_post.html')
 
 
-@app.route('/delete/<post_id>', methods=['POST'])
+@app.route('/delete/<int:post_id>', methods=['POST'])
 def delete_post(post_id):
     blog_posts = blog_data.get_posts()
 
-    for index, dictionary in enumerate(blog_posts):
+    post_index, post = blog_data.get_post_by_id(post_id)
 
-        if dictionary['id'] == int(post_id):
-            del blog_posts[index]
+    del blog_posts[post_index]
 
     blog_data.save_posts(blog_posts)
 
-
     # reload index.html, cause the data has changed
     return redirect(url_for('index'))
+
+
+@app.route('/update/<int:post_id>', methods=['POST'])
+def update_post(post_id):
+    """If methods = 'GET'-> update Blogpost, if methods = 'POST' save updated Blogpost"""
+    # Fetch the blog posts from the JSON file
+    blog_posts = blog_data.get_posts()
+    post_index, post = blog_data.get_post_by_id(post_id)
+
+    if post is None:
+        # Post not found
+        return "Post not found", 404
+
+    if request.method == 'POST':
+        # Update the post in the JSON file
+        new_content = request.form.get('content')
+
+        blog_posts[post_index]['content'] = new_content
+
+        blog_data.save_posts(blog_posts)
+        # Redirect back to index
+        return redirect(url_for('index'))
+
+    elif request.method == 'GET':
+        # So display the update.html page
+        return render_template('update.html', post=post)
 
 
 if __name__ == '__main__':
