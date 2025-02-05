@@ -25,9 +25,24 @@ class Crud:
       json.dump(new_data, json_obj, indent=4)
 
 
-  def get_id(self):
+
+  def get_newest_id(self):
       """returns newest_blog_post_id"""
       blog_posts = self.get_posts()
       newest_id = blog_posts[-1]['id']
 
       return newest_id
+
+
+  def get_post_by_id(self, post_id) -> tuple:
+    """gets post by its id. Returns post_index in list and post"""
+    blog_posts = self.get_posts()
+
+    for post_index, post in enumerate(blog_posts):
+      if post['id'] == post_id:
+        return post_index, post
+
+      else:
+        return None, None
+
+
