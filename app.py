@@ -36,11 +36,11 @@ def add():
 
 @app.route('/delete/<int:post_id>', methods=['POST'])
 def delete_post(post_id):
-    blog_posts = blog_data.get_posts()
-
     post_index, post = blog_data.get_post_by_id(post_id)
 
+    blog_posts = blog_data.get_posts()
     del blog_posts[post_index]
+
 
     blog_data.save_posts(blog_posts)
 
