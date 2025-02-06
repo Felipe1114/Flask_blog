@@ -39,7 +39,7 @@ class Crud:
     blog_posts = self.get_posts()
 
     for post_index, post in enumerate(blog_posts):
-      if post['id'] == post_id:
+      if post['id'] == int(post_id):
         return post_index, post
 
       else:
