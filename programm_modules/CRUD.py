@@ -29,7 +29,14 @@ class Crud:
   def get_newest_id(self):
       """returns newest_blog_post_id"""
       blog_posts = self.get_posts()
-      newest_id = blog_posts[-1]['id']
+
+      if len(blog_posts) == 0:
+        # when 0 posts in blog_posts, 'newest_id' is 0, cause, by creating,
+        # the new post has 'newest_id+1' as his post_id
+        newest_id = 0
+
+      else:
+        newest_id = blog_posts[-1]['id']
 
       return newest_id
 
@@ -37,12 +44,11 @@ class Crud:
   def get_post_by_id(self, post_id) -> tuple:
     """gets post by its id. Returns post_index in list and post"""
     blog_posts = self.get_posts()
-
     for post_index, post in enumerate(blog_posts):
       if post['id'] == int(post_id):
+
         return post_index, post
 
-      else:
-        return None, None
+    return None, None
 
 
