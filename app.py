@@ -74,7 +74,6 @@ def update(post_id):
         blog_data.save_posts(blog_posts)
 
         # Redirect back to index
-        print("rendering_update html")
         return redirect(url_for('index'))
 
     else:
