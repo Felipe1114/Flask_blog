@@ -47,8 +47,7 @@ def delete_post(post_id):
     # reload index.html, cause the data has changed
     return redirect(url_for('index'))
 
-# TODO route funktioniert nicht, wieso?
-@app.route('/update/<int:post_id>', methods=['GET', 'POST'])
+@app.route('/update/<post_id>', methods=['GET', 'POST'])
 def update(post_id):
     """If methods = 'GET'-> update Blogpost, if methods = 'POST' save updated Blogpost"""
     # Fetch the blog posts from the JSON file
@@ -75,9 +74,9 @@ def update(post_id):
         blog_data.save_posts(blog_posts)
 
         # Redirect back to index
+        print("rendering_update html")
         return redirect(url_for('index'))
 
-    # TODO route funktioniert nicht, wieso?
     else:
         # So display the update.html page
         return render_template('update.html', post=post)
